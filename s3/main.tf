@@ -1,6 +1,5 @@
-resource "aws_s3_bucket" "b" {
+resource "aws_s3_bucket" "test_bucket_shams" {
   bucket_prefix = var.bucket_prefix
-  acl           = var.acl
   versioning {
     enabled = var.versioning
   }
@@ -20,7 +19,7 @@ resource "aws_s3_bucket" "b" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "shams_test_s3_bucket_ownerships_controls" {
-  bucket = aws_s3_bucket.shams-test-s3.id
+  bucket = aws_s3_bucket.test_bucket_shams.id
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
@@ -29,6 +28,6 @@ resource "aws_s3_bucket_ownership_controls" "shams_test_s3_bucket_ownerships_con
 resource "aws_s3_bucket_acl" "shams_test_s3_bucket_acl" {
   depends_on = [aws_s3_bucket_ownership_controls.shams_test_s3_bucket_ownerships_controls]
 
-  bucket = aws_s3_bucket.shams-test-s3.id
+  bucket = aws_s3_bucket.test_bucket_shams.id
   acl    = "private"
 }
