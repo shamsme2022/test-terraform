@@ -42,7 +42,12 @@ variable "tags" {
   type        = map(any)
   description = ""
   default = {
-    environment = "prod"
+    environment = "dev"
     terraform   = "true"
   }
+}
+variable "cf_oai_arn" {
+  type        = string
+  description = ""
+  default     = ""
 }

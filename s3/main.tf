@@ -63,6 +63,29 @@ resource "aws_s3_bucket_logging" "test_bucket_shams_logs_attachment" {
 }
 ################################ Bucket Logging End ########################
 
+resource "aws_s3_bucket_policy" "cdn-cf-policy" {
+  bucket = aws_s3_bucket.test_bucket_shams.id
+  policy = data.aws_iam_policy_document.test-shams-cdn-cf-policy.json
+}
+
+data "aws_iam_policy_document" "test-shams-cdn-cf-policy" {
+  statement {
+    sid = "1"
+    principals {
+      type        = "AWS"
+      identifiers = [var.cf_oai_arn]
+    }
+
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.test_bucket_shams.arn}/*"
+    ]
+  }
+}
+
 ################## Uploads dummy html ###############
 resource "aws_s3_object" "upload_object" {
   for_each     = fileset("html/", "*")
