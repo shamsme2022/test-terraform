@@ -1,7 +1,7 @@
 variable "bucket_prefix" {
   type        = string
   description = ""
-  default     = ""
+  default     = "shams_test_"
 }
 variable "acl" {
   type        = string
@@ -17,6 +17,11 @@ variable "target_bucket" {
   type        = string
   description = ""
   default     = ""
+}
+variable "target_bucket_prefix" {
+  type        = string
+  description = ""
+  default     = "shams_test_log_"
 }
 variable "target_prefix" {
   type        = string
