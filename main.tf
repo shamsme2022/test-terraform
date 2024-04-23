@@ -21,5 +21,5 @@ module "s3" {
 module "cf" {
   source         = "./cf"
   s3_origin_id   = module.s3.bucket_name
-  s3_domain_name = module.s3.bucket_doamin
+  s3_domain_name = module.s3.s3_bucket_website_doamin
 }

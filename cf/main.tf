@@ -10,8 +10,11 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
   origin {
     origin_id   = var.s3_origin_id
     domain_name = var.s3_domain_name
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.aws_cf_test_shams_OAI.cloudfront_access_identity_path
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1"]
     }
   }
 

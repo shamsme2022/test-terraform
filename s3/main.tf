@@ -63,6 +63,22 @@ resource "aws_s3_bucket_logging" "test_bucket_shams_logs_attachment" {
 }
 ################################ Bucket Logging End ########################
 
+################################ S3 static website hosting Start ########################
+# resource "aws_s3_bucket_website_configuration" "test_bucket_shams_website" {
+#   bucket = aws_s3_bucket.test_bucket_shams.bucket
+
+#   index_document {
+#     suffix = "index.html"
+#   }
+
+#   error_document {
+#     key = "index.html"
+#   }
+# }
+
+################################ S3 static website hosting End ########################
+
+################################ S3 bucket policy to allow CloudFront principal using OAI Start ########################
 resource "aws_s3_bucket_policy" "cdn-cf-policy" {
   bucket = aws_s3_bucket.test_bucket_shams.id
   policy = data.aws_iam_policy_document.test-shams-cdn-cf-policy.json
@@ -85,6 +101,7 @@ data "aws_iam_policy_document" "test-shams-cdn-cf-policy" {
     ]
   }
 }
+################################ S3 bucket policy to allow CloudFront principal using OAI End ########################
 
 ################## Uploads dummy html ###############
 resource "aws_s3_object" "upload_object" {
