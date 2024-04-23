@@ -62,3 +62,14 @@ resource "aws_s3_bucket_logging" "test_bucket_shams_logs_attachment" {
   target_prefix = var.target_prefix
 }
 ################################ Bucket Logging End ########################
+
+################## Uploads dummy html ###############
+resource "aws_s3_object" "upload_object" {
+  for_each     = fileset("html/", "*")
+  bucket       = aws_s3_bucket.test_bucket_shams.id
+  key          = each.value
+  source       = "html/${each.value}"
+  etag         = filemd5("html/${each.value}")
+  content_type = "text/html"
+}
+################## Uploads dummy html ###############
