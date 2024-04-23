@@ -15,3 +15,10 @@ provider "aws" {
 module "s3" {
   source = "./s3"
 }
+
+########## Creating a cloud front distruction with s3 #######
+module "cf" {
+  source         = "./cf"
+  s3_origin_id   = module.s3.bucket_name
+  s3_domain_name = module.s3.bucket_doamin
+}

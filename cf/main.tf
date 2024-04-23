@@ -1,15 +1,12 @@
-locals {
-  s3_origin_id   = module.s3.bucket_doamin
-  s3_domain_name = module.s3.bucket_name
-}
 
-resource "aws_cloudfront_distribution" "this" {
+
+resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   enabled = true
 
   origin {
-    origin_id   = local.s3_origin_id
-    domain_name = local.s3_domain_name
+    origin_id   = var.s3_origin_id
+    domain_name = var.s3_domain_name
     custom_origin_config {
       http_port              = 80
       https_port             = 443
@@ -20,7 +17,7 @@ resource "aws_cloudfront_distribution" "this" {
 
   default_cache_behavior {
 
-    target_origin_id = local.s3_origin_id
+    target_origin_id = var.s3_origin_id
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
 
