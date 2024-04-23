@@ -11,7 +11,7 @@ provider "aws" {
   region = var.region
 }
 
-########## Creating a bucket from the S3 Module #######
+########## Creating a bucket from the s3 Module #######
 module "s3" {
   source = "./s3"
 }
