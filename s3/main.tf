@@ -4,21 +4,21 @@ resource "aws_s3_bucket" "test_bucket_shams" {
 }
 
 ################################ Key and key attachment for bucket encryption start ##########################
-# resource "aws_kms_key" "test_bucket_shams_encryption_key" {
-#   description             = "This key is used to encrypt bucket objects"
-#   deletion_window_in_days = 10
-# }
+resource "aws_kms_key" "test_bucket_shams_encryption_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+}
 
-# resource "aws_s3_bucket_server_side_encryption_configuration" "test_bucket_shams_encryption_config" {
-#   bucket = aws_s3_bucket.test_bucket_shams.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "test_bucket_shams_encryption_config" {
+  bucket = aws_s3_bucket.test_bucket_shams.id
 
-#   rule {
-#     apply_server_side_encryption_by_default {
-#       kms_master_key_id = aws_kms_key.test_bucket_shams_encryption_key.arn
-#       sse_algorithm     = var.sse_algorithm
-#     }
-#   }
-# }
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.test_bucket_shams_encryption_key.arn
+      sse_algorithm     = var.sse_algorithm
+    }
+  }
+}
 ################################ Key and key attachment for bucket encryption end ##########################
 
 
@@ -79,26 +79,24 @@ resource "aws_s3_bucket_logging" "test_bucket_shams_logs_attachment" {
 ################################ S3 static website hosting End ########################
 
 ################################ S3 bucket policy to allow CloudFront principal using OAI Start ########################
-resource "aws_s3_bucket_policy" "cdn-cf-policy" {
+resource "aws_s3_bucket_policy" "cdn-oac-bucket-policy" {
   bucket = aws_s3_bucket.test_bucket_shams.id
-  policy = data.aws_iam_policy_document.test-shams-cdn-cf-policy.json
+  policy = data.aws_iam_policy_document.test_bucket_shams_s3_bucket_policy.json
 }
 
-data "aws_iam_policy_document" "test-shams-cdn-cf-policy" {
+data "aws_iam_policy_document" "test_bucket_shams_s3_bucket_policy" {
   statement {
-    sid = "1"
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.test_bucket_shams.arn}/*"]
     principals {
-      type        = "AWS"
-      identifiers = [var.cf_oai_arn]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
-
-    actions = [
-      "s3:GetObject"
-    ]
-
-    resources = [
-      "${aws_s3_bucket.test_bucket_shams.arn}/*"
-    ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [var.cf_arn]
+    }
   }
 }
 ################################ S3 bucket policy to allow CloudFront principal using OAI End ########################

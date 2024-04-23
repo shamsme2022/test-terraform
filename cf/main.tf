@@ -1,15 +1,12 @@
 
-resource "aws_cloudfront_origin_access_identity" "aws_cf_test_shams_OAI" {
-  comment = "Some comment"
-}
-
 resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   enabled = true
 
   origin {
-    origin_id   = var.s3_origin_id
-    domain_name = var.s3_domain_name
+    origin_id                = var.s3_origin_id
+    domain_name              = var.s3_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_s3_oac.id
     custom_origin_config {
       http_port              = 80
       https_port             = 443
@@ -50,4 +47,12 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   price_class = "PriceClass_200"
 
+}
+
+resource "aws_cloudfront_origin_access_control" "cloudfront_s3_oac" {
+  name                              = "CloudFront S3 OAC"
+  description                       = "Cloud Front S3 OAC"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }

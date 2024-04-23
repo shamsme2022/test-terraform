@@ -46,7 +46,7 @@ variable "tags" {
     terraform   = "true"
   }
 }
-variable "cf_oai_arn" {
+variable "cf_arn" {
   type        = string
   description = ""
   default     = ""

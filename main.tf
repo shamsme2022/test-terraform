@@ -13,8 +13,8 @@ provider "aws" {
 
 ########## Creating a bucket from the s3 Module #######
 module "s3" {
-  source     = "./s3"
-  cf_oai_arn = module.cf.cloudfront_origin_Access_identity
+  source = "./s3"
+  cf_arn = module.cf.cloudfront_distribution_arn
 }
 
 ########## Creating a cloud front distruction with s3 #######

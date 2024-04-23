@@ -1,5 +1,5 @@
-output "cloudfront_origin_Access_identity" {
-  value = aws_cloudfront_origin_access_identity.aws_cf_test_shams_OAI.iam_arn
+output "cloudfront_distribution_arn" {
+  value = aws_cloudfront_distribution.aws_cf_test_shams.arn
 }
 
 output "cloudfront_url" {
