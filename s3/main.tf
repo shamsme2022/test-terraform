@@ -51,7 +51,7 @@ resource "aws_s3_bucket_versioning" "versioning_example" {
 ################################ Bucket Logging Start ########################
 
 resource "aws_s3_bucket" "log_bucket_for_test_bucket_shams" {
-  bucket_prefix = var.target_prefix
+  bucket_prefix = var.target_bucket_prefix
   tags          = var.tags
 }
 
