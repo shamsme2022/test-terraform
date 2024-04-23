@@ -4,21 +4,21 @@ resource "aws_s3_bucket" "test_bucket_shams" {
 }
 
 ################################ Key and key attachment for bucket encryption start ##########################
-resource "aws_kms_key" "test_bucket_shams_encryption_key" {
-  description             = "This key is used to encrypt bucket objects"
-  deletion_window_in_days = 10
-}
+# resource "aws_kms_key" "test_bucket_shams_encryption_key" {
+#   description             = "This key is used to encrypt bucket objects"
+#   deletion_window_in_days = 10
+# }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "test_bucket_shams_encryption_config" {
-  bucket = aws_s3_bucket.test_bucket_shams.id
+# resource "aws_s3_bucket_server_side_encryption_configuration" "test_bucket_shams_encryption_config" {
+#   bucket = aws_s3_bucket.test_bucket_shams.id
 
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.test_bucket_shams_encryption_key.arn
-      sse_algorithm     = var.sse_algorithm
-    }
-  }
-}
+#   rule {
+#     apply_server_side_encryption_by_default {
+#       kms_master_key_id = aws_kms_key.test_bucket_shams_encryption_key.arn
+#       sse_algorithm     = var.sse_algorithm
+#     }
+#   }
+# }
 ################################ Key and key attachment for bucket encryption end ##########################
 
 
