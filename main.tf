@@ -41,7 +41,5 @@ provider "aws" {
 
 
 module "s3" {
-  source        = "./s3"
-  bucket_prefix = "shams_test_"
-  target_bucket = "shams_test_log_bucket_"
+  source = "./s3"
 }
