@@ -1,13 +1,6 @@
 resource "aws_s3_bucket" "test_bucket_shams" {
   bucket_prefix = var.bucket_prefix
-  versioning {
-    enabled = var.versioning
-  }
-  logging {
-    target_bucket = var.target_bucket
-    target_prefix = var.target_prefix
-  }
-  tags = var.tags
+  tags          = var.tags
 }
 
 ################################ Key and key attachment for bucket encryption start ##########################
@@ -22,7 +15,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "test_bucket_shams
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = aws_kms_key.test_bucket_shams_encryption_key.arn
-      sse_algorithm     = "aws:kms"
+      sse_algorithm     = var.sse_algorithm
     }
   }
 }
@@ -44,3 +37,28 @@ resource "aws_s3_bucket_acl" "shams_test_s3_bucket_acl" {
   acl    = "private"
 }
 ################################ Ownership controls and ACL End ##########################
+
+
+################################ Bucket Versioning Start ########################
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.test_bucket_shams.id
+  versioning_configuration {
+    status = var.versioning[0]
+  }
+}
+################################ Bucket Versioning End ##########################
+
+################################ Bucket Logging Start ########################
+
+resource "aws_s3_bucket" "log_bucket_for_test_bucket_shams" {
+  bucket_prefix = var.target_prefix
+  tags          = var.tags
+}
+
+resource "aws_s3_bucket_logging" "test_bucket_shams_logs_attachment" {
+  bucket = aws_s3_bucket.test_bucket_shams.id
+
+  target_bucket = aws_s3_bucket.log_bucket_for_test_bucket_shams.id
+  target_prefix = var.target_prefix
+}
+################################ Bucket Logging End ########################
