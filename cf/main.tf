@@ -50,7 +50,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 }
 
 resource "aws_cloudfront_origin_access_control" "aws_cf_test_shams_s3_oac" {
-  name                              = "CloudFront S3 OAC"
+  name                              = "${aws_cloudfront_distribution.aws_cf_test_shams.id}-${var.access_control_name}"
   description                       = "Cloud Front S3 OAC"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"

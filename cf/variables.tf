@@ -9,3 +9,9 @@ variable "s3_domain_name" {
   description = ""
   default     = ""
 }
+
+variable "access_control_name" {
+  type        = string
+  description = ""
+  default     = "new-access-control"
+}
