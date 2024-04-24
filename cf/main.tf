@@ -6,7 +6,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
   origin {
     origin_id                = var.s3_origin_id
     domain_name              = var.s3_domain_name
-    origin_access_control_id = aws_cloudfront_origin_access_control.cloudfront_s3_oac.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.aws_cf_test_shams_s3_oac.id
     custom_origin_config {
       http_port              = 80
       https_port             = 443
@@ -49,7 +49,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
 }
 
-resource "aws_cloudfront_origin_access_control" "cloudfront_s3_oac" {
+resource "aws_cloudfront_origin_access_control" "aws_cf_test_shams_s3_oac" {
   name                              = "CloudFront S3 OAC"
   description                       = "Cloud Front S3 OAC"
   origin_access_control_origin_type = "s3"
