@@ -19,7 +19,8 @@ module "s3" {
 
 ########## Creating a cloud front distruction with s3 #######
 module "cf" {
-  source         = "./cf"
-  s3_origin_id   = module.s3.bucket_name
-  s3_domain_name = module.s3.s3_bucket_website_doamin
+  source              = "./cf"
+  s3_origin_id        = module.s3.bucket_name
+  s3_domain_name      = module.s3.s3_bucket_website_doamin
+  access_control_name = module.s3.bucket_name
 }

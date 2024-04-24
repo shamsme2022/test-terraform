@@ -7,12 +7,6 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
     origin_id                = var.s3_origin_id
     domain_name              = var.s3_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.aws_cf_test_shams_s3_oac.id
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1"]
-    }
   }
 
   default_cache_behavior {
@@ -50,7 +44,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 }
 
 resource "aws_cloudfront_origin_access_control" "aws_cf_test_shams_s3_oac" {
-  name                              = "${aws_cloudfront_distribution.aws_cf_test_shams.id}-${var.access_control_name}"
+  name                              = var.access_control_name
   description                       = "Cloud Front S3 OAC"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
