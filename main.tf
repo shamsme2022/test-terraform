@@ -57,3 +57,17 @@ resource "aws_route53_record" "ns_record_shams" {
   records = aws_route53_zone.zone_shams.name_servers
 }
 
+#adding an A record to shams.abc.printdeal.com to point it to cloudFront
+resource "aws_route53_record" "ns_record_shams_cf" {
+  type    = "A"
+  zone_id = aws_route53_zone.zone_shams.id
+  name    = "shams"
+
+  alias {
+    name                   = module.cf.cloudfront_url
+    zone_id                = module.cf.hosted_zone
+    evaluate_target_health = false
+  }
+}
+
+
