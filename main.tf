@@ -16,17 +16,24 @@ provider "aws" {
 }
 
 ########## Creating a bucket from the s3 Module #######
-module "s3" {
+module "s3_primary" {
+  source = "./s3"
+  cf_arn = module.cf.cloudfront_distribution_arn
+}
+
+module "s3_failover" {
   source = "./s3"
   cf_arn = module.cf.cloudfront_distribution_arn
 }
 
 ########## Creating a cloud front distruction with s3 #######
 module "cf" {
-  source              = "./cf"
-  s3_origin_id        = module.s3.bucket_name
-  s3_domain_name      = module.s3.s3_bucket_website_doamin
-  access_control_name = module.s3.bucket_name
+  source                  = "./cf"
+  s3_primary_origin_id    = module.s3_primary.bucket_name
+  s3_primary_domain_name  = module.s3_primary.s3_bucket_website_doamin
+  s3_failover_origin_id   = module.s3_failover.bucket_name
+  s3_failover_domain_name = module.s3_failover.s3_bucket_website_doamin
+  access_control_name     = module.s3_primary.bucket_name
 }
 
 

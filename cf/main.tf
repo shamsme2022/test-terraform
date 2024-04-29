@@ -20,16 +20,36 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   aliases = ["shams.abc.printdeal.com"]
 
+  origin_group {
+    origin_id = "distribution"
+
+    member {
+      origin_id = var.s3_primary_origin_id
+    }
+    member {
+      origin_id = var.s3_failover_origin_id
+    }
+    failover_criteria {
+      status_codes = [403, 404, 500, 502, 503, 504]
+    }
+  }
+
   origin {
-    origin_id                = var.s3_origin_id
-    domain_name              = var.s3_domain_name
+    origin_id                = var.s3_primary_origin_id
+    domain_name              = var.s3_primary_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.aws_cf_test_shams_s3_oac.id
+  }
+
+  origin {
+    origin_id                = var.s3_failover_origin_id
+    domain_name              = var.s3_failover_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.aws_cf_test_shams_s3_oac.id
   }
 
 
   default_cache_behavior {
 
-    target_origin_id = var.s3_origin_id
+    target_origin_id = "distribution"
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
 

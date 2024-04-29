@@ -1,14 +1,27 @@
-variable "s3_origin_id" {
+variable "s3_primary_origin_id" {
   type        = string
   description = ""
   default     = ""
 }
 
-variable "s3_domain_name" {
+variable "s3_primary_domain_name" {
   type        = string
   description = ""
   default     = ""
 }
+
+variable "s3_failover_origin_id" {
+  type        = string
+  description = ""
+  default     = ""
+}
+
+variable "s3_failover_domain_name" {
+  type        = string
+  description = ""
+  default     = ""
+}
+
 
 variable "access_control_name" {
   type        = string
