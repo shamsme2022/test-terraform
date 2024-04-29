@@ -13,6 +13,22 @@ resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
   }
 }
 
+##### s3 bucket for standard CloudFront logging
+resource "aws_s3_bucket" "cf_standard_logging_bucket" {
+  bucket_prefix = "cflogs"
+  tags = {
+    Name = "cf-logs"
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "cf_standard_logging_bucket_owner_ship" {
+  bucket = aws_s3_bucket.cf_standard_logging_bucket.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 ### CouldFront distribution
 resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
@@ -83,6 +99,12 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
     # cloudfront_default_certificate = true
     acm_certificate_arn = aws_acm_certificate.cert_abc_printdeal_com_us_east_1.arn
     ssl_support_method  = "sni-only"
+  }
+
+  logging_config {
+    include_cookies = false
+    bucket          = "${aws_s3_bucket.cf_standard_logging_bucket.id}.s3.amazonaws.com"
+    prefix          = "logs"
   }
 
   price_class = "PriceClass_200"
