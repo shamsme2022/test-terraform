@@ -1,9 +1,5 @@
 
-# data "aws_acm_certificate" "issued_abc_printdeal_com" {
-#   domain   = "*.abc.printdeal.com"
-#   statuses = ["ISSUED"]
-# }
-
+### SSL certificate for the subdomain
 resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
   domain_name       = "*.abc.printdeal.com"
   validation_method = "DNS"
@@ -17,6 +13,7 @@ resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
   }
 }
 
+### CouldFront distribution
 resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   enabled = true
@@ -48,6 +45,11 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
     min_ttl                = 0
     default_ttl            = 0
     max_ttl                = 0
+
+    function_association {
+      event_type   = "viewer-response"
+      function_arn = aws_cloudfront_function.cf_function.arn
+    }
   }
 
   restrictions {
@@ -55,6 +57,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
       restriction_type = "none"
     }
   }
+
 
   viewer_certificate {
     # cloudfront_default_certificate = true
@@ -66,10 +69,41 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
 }
 
+### OAC For the CloudFront distribution to access the designated S3 bucket
 resource "aws_cloudfront_origin_access_control" "aws_cf_test_shams_s3_oac" {
   name                              = var.access_control_name
   description                       = "Cloud Front S3 OAC"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
+}
+
+
+### Lambda edge for setting security headers
+resource "aws_lambda_function" "lambda_setting_security_headers" {
+  description      = "Lambda edge for setting security headers"
+  function_name    = "lambda-set-security-headers"
+  runtime          = "nodejs20.x"
+  handler          = "lambda.handler"
+  memory_size      = 128
+  timeout          = 10
+  filename         = "lambda-edge.zip"
+  source_code_hash = data.archive_file.lambda.output_base64sha256
+  role             = aws_iam_role.role_for_lambda.arn
+  publish          = true
+}
+
+### IAM role for lamda edge to assume
+resource "aws_iam_role" "role_for_lambda" {
+  name               = "iam-role-for-lambda-security-headers"
+  description        = "IAM role for lambda security headers"
+  assume_role_policy = data.aws_iam_policy_document.assume_policy.json
+}
+
+### CloudFront Function
+resource "aws_cloudfront_function" "cf_function" {
+  name    = "security-header-function"
+  comment = "Setup security response headers"
+  runtime = "cloudfront-js-1.0"
+  code    = file("${path.module}/function.js")
 }
