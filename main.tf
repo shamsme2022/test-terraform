@@ -37,30 +37,10 @@ data "aws_route53_zone" "master_apex_hosted_zone" {
   private_zone = false
 }
 
-#adding a hosted zone for the subdomain shams.ab
-resource "aws_route53_zone" "zone_shams" {
-  name    = "shams.abc.printdeal.com"
-  comment = "Hosted Zone for shams.example.com"
-
-  tags = {
-    Name   = "shams.abc.printdeal.com"
-    Origin = "terraform"
-  }
-}
-
-#adding a record to the apex record for sub-domain
-resource "aws_route53_record" "ns_record_shams" {
-  type    = "NS"
-  zone_id = data.aws_route53_zone.master_apex_hosted_zone.id
-  name    = "shams"
-  ttl     = "86400"
-  records = aws_route53_zone.zone_shams.name_servers
-}
-
 #adding an A record to shams.abc.printdeal.com to point it to cloudFront
 resource "aws_route53_record" "ns_record_shams_cf" {
   type    = "A"
-  zone_id = aws_route53_zone.zone_shams.id
+  zone_id = data.aws_route53_zone.master_apex_hosted_zone.id
   name    = "shams"
 
   alias {
