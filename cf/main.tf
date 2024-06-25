@@ -32,8 +32,10 @@ resource "aws_s3_bucket_ownership_controls" "cf_standard_logging_bucket_owner_sh
 ### CouldFront distribution
 resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
-  enabled             = true
-  is_ipv6_enabled     = true
+  enabled         = true
+  is_ipv6_enabled = true
+  http_version    = "http3"
+
   default_root_object = "index.html"
 
   aliases = ["shams.abc.printdeal.com"]
