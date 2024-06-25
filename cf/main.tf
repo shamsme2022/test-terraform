@@ -32,7 +32,9 @@ resource "aws_s3_bucket_ownership_controls" "cf_standard_logging_bucket_owner_sh
 ### CouldFront distribution
 resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
-  enabled = true
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
 
   aliases = ["shams.abc.printdeal.com"]
 
@@ -107,7 +109,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
     prefix          = "logs"
   }
 
-  price_class = "PriceClass_200"
+  price_class = "PriceClass_All"
 
 }
 
