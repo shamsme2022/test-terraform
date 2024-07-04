@@ -15,10 +15,9 @@ resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
 
 ##### s3 bucket for standard CloudFront logging
 resource "aws_s3_bucket" "cf_standard_logging_bucket" {
-  bucket_prefix = "${aws_cloudfront_distribution.aws_cf_test_shams.domain_name}_log_bucket"
+  bucket_prefix = "${var.cloud_front_distribution_name}_logs"
   tags = {
-    Name            = "cf-logs"
-    CF-distribution = aws_cloudfront_distribution.aws_cf_test_shams.domain_name
+    Name = "${var.cloud_front_distribution_name}_log_bucket"
   }
 }
 
@@ -42,7 +41,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
   aliases = ["shams.abc.printdeal.com"]
 
   tags    = var.tags
-  comment = "Shams CF Test Description"
+  comment = var.cloud_front_distribution_name
 
   origin_group {
     origin_id = "distribution"

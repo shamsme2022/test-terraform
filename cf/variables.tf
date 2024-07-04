@@ -1,3 +1,9 @@
+variable "cloud_front_distribution_name" {
+  type        = string
+  description = ""
+  default     = ""
+}
+
 variable "s3_primary_origin_id" {
   type        = string
   description = ""
