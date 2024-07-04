@@ -34,6 +34,10 @@ module "cf" {
   s3_failover_origin_id   = module.s3_failover.bucket_name
   s3_failover_domain_name = module.s3_failover.s3_bucket_website_doamin
   access_control_name     = module.s3_primary.bucket_name
+  tags = {
+    Environment : "dev",
+    test : true
+  }
 }
 
 
@@ -56,5 +60,3 @@ resource "aws_route53_record" "ns_record_shams_cf" {
     evaluate_target_health = false
   }
 }
-
-

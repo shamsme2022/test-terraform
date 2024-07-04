@@ -28,3 +28,15 @@ variable "access_control_name" {
   description = ""
   default     = "new-access-control"
 }
+
+variable "tags" {
+  type = object({
+    Environment : string
+    test : bool
+  })
+  description = ""
+  default = {
+    Environment : "test"
+    test : true
+  }
+}
