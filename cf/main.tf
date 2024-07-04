@@ -40,7 +40,8 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   aliases = ["shams.abc.printdeal.com"]
 
-  tags = var.tags
+  tags    = var.tags
+  comment = "Shams CF Test Description"
 
   origin_group {
     origin_id = "distribution"
