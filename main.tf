@@ -29,7 +29,7 @@ module "s3_failover" {
 ########## Creating a cloud front distruction with s3 #######
 module "cf" {
   source                        = "./cf"
-  cloud_front_distribution_name = "shams_test_cf"
+  cloud_front_distribution_name = "shams-test-cf"
   s3_primary_origin_id          = module.s3_primary.bucket_name
   s3_primary_domain_name        = module.s3_primary.s3_bucket_website_doamin
   s3_failover_origin_id         = module.s3_failover.bucket_name
