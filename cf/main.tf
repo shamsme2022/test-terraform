@@ -101,8 +101,9 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
 
   viewer_certificate {
     # cloudfront_default_certificate = true
-    acm_certificate_arn = aws_acm_certificate.cert_abc_printdeal_com_us_east_1.arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = aws_acm_certificate.cert_abc_printdeal_com_us_east_1.arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   logging_config {
