@@ -15,9 +15,10 @@ resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
 
 ##### s3 bucket for standard CloudFront logging
 resource "aws_s3_bucket" "cf_standard_logging_bucket" {
-  bucket_prefix = "cflogs"
+  bucket_prefix = "${aws_cloudfront_distribution.aws_cf_test_shams.domain_name}_log_bucket"
   tags = {
-    Name = "cf-logs"
+    Name            = "cf-logs"
+    CF-distribution = aws_cloudfront_distribution.aws_cf_test_shams.domain_name
   }
 }
 
@@ -109,6 +110,7 @@ resource "aws_cloudfront_distribution" "aws_cf_test_shams" {
     minimum_protocol_version = "TLSv1.2_2021"
   }
 
+  ### Cloudfront Standard logging enabled
   logging_config {
     include_cookies = false
     bucket          = "${aws_s3_bucket.cf_standard_logging_bucket.id}.s3.amazonaws.com"
