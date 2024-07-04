@@ -15,7 +15,7 @@ resource "aws_acm_certificate" "cert_abc_printdeal_com_us_east_1" {
 
 ##### s3 bucket for standard CloudFront logging
 resource "aws_s3_bucket" "cf_standard_logging_bucket" {
-  bucket_prefix = "${var.cloud_front_distribution_name}_logs"
+  bucket_prefix = "${var.cloud_front_distribution_name}-logs"
   tags = {
     Name = "${var.cloud_front_distribution_name}_log_bucket"
   }
